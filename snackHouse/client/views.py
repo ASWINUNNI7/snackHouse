@@ -96,9 +96,23 @@ def food(request):
 
 def order(request):
    food_name=request.POST['foodname']
-   price=request.POST['price']
-   tables=Tables.objects.all()
-   return render(request,'order.html',{'tables':tables,'food':food_name,'price':price})
+   food_image=request.POST['foodimg']
+   fquantity=request.POST['fquantity']
+   fquantity=float(fquantity)
+   fprice=request.POST['fprice']
+   fprice=float(fprice)
+   name=request.user.username
+   table='T11'
+   members=1
+   totalPrice=fprice*fquantity
+   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,members=members,total_price=totalPrice,food_image=food_image)
+   checkOrder=Order.objects.filter(name=name,food_name=food_name)
+   if checkOrder.exists():
+      messages.info(request,'already you ordered this food,please update it')
+   else:
+      newOrder.save()
+      messages.info(request,'added to cart successfully')
+   return redirect(reverse('food'))
 
 def orderFood(request):
    name=request.POST['fname']
@@ -160,13 +174,12 @@ def confirmMessage(request):
    return render(request,'payment_alert.html',{'payments':userpayment})
 
 def cancelOrder(request):
-   name=request.user.first_name
-   food=request.POST['food']
-   table=request.POST['table']
-   order=Order.objects.filter(name=name,food_name=food,table_name=table)
+   name=request.user.username
+   food=request.POST['foodname']
+   order=Order.objects.filter(name=name,food_name=food)
    order.delete()
    messages.info(request,'order cancelled')
-   return HttpResponseRedirect(reverse('ordertable'))
+   return HttpResponseRedirect(reverse('cart'))
 
 def cancelPayment(request):
    name=request.user.first_name
@@ -217,6 +230,11 @@ def otpPage(request):
       else :
          messages.info(request,'invalid otp')
    return render(request,'otp.html')
+
+def cart(request):
+   name=request.user.username
+   orders=Order.objects.filter(name=name)
+   return render(request,'cart.html',{'orders':orders})
 
 #--------------------------------------------------Helper functions------------------------------------------------------------------
 def checkorder(table,food,name):

@@ -35,9 +35,13 @@ alert('{{message}}')
           <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
           <form action="order" method="post">
             <input type="hidden" name="foodname" value="{{food.food_name}}">
-            <input type="hidden" name="price" value="{{food.price}}">
+            <input type="hidden" name="foodimg" value="{{food.food_image}}">
+            <input type="hidden" name="fprice" value="{{food.price}}">
+            <label for="fquantity">Quantity</label>
+            <input type="number" name="fquantity" value="1">
+            <br><br>
             <div class="d-flex justify-content-center"> 
-              <button type="submit" class="btn btn-warning btn mx-2">Buy</button>
+              <button type="submit" class="btn btn-warning btn mx-2">Add to cart</button>
           </div>
           </form>
         </div>

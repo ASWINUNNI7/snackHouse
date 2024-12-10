@@ -17,10 +17,11 @@ urlpatterns=[
   path('home/payment',views.payment,name='payment'),
   path('home/orderdetails',views.orderdetails,name='orderdetails'),
   path('home/confirm',views.confirmMessage,name='confirm'),
-  path('home/cancelorder',views.cancelOrder,name='cancelorder'),
+  path('cancelorder',views.cancelOrder,name='cancelorder'),
   path('home/cancelpay',views.cancelPayment,name='cancelpay'),
   path('home/updateorder',views.updateOrder,name='updateorder'),
   path('home/updateorderfood',views.updateorderfood,name='updateorderfood'),
   path('home/confirmpay',views.confirmPayment,name='confirmpay'),
-  path('otp',views.otpPage,name='otpPage')
+  path('otp',views.otpPage,name='otpPage'),
+  path('cart',views.cart,name='cart')
 ]
