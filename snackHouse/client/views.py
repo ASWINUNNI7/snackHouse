@@ -236,6 +236,22 @@ def cart(request):
    orders=Order.objects.filter(name=name)
    return render(request,'cart.html',{'orders':orders})
 
+def indianFood(request):
+   foods=Snacks.objects.filter(category='Indian')
+   return render(request,'indian.html',{'foods':foods})
+
+def arabianFood(request):
+   foods=Snacks.objects.filter(category='Arabian')
+   return render(request,'arabian.html',{'foods':foods})
+
+def europeanFood(request):
+   foods=Snacks.objects.filter(category='European')
+   return render(request,'european.html',{'foods':foods})
+
+def drinks(request):
+   foods=Snacks.objects.filter(category='Drinks')
+   return render(request,'drinks.html',{'foods':foods})
+
 #--------------------------------------------------Helper functions------------------------------------------------------------------
 def checkorder(table,food,name):
    order=Order.objects.filter(table_name=table,food_name=food,name=name)
