@@ -33,7 +33,7 @@ alert('{{message}}')
           font-size: 1.5rem;
           text-transform: uppercase;">{{food.food_name}}</h5>
           <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
-          <form action="order" method="post">
+          <form action="indianOrder" method="post">
             <input type="hidden" name="foodname" value="{{food.food_name}}">
             <input type="hidden" name="foodimg" value="{{food.food_image}}">
             <input type="hidden" name="fprice" value="{{food.price}}">
