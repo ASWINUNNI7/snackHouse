@@ -94,25 +94,7 @@ def food(request):
    foods=Snacks.objects.all()
    return render(request,'food.html',{'foods':foods})
 
-def order(request):
-   food_name=request.POST['foodname']
-   food_image=request.POST['foodimg']
-   fquantity=request.POST['fquantity']
-   fquantity=float(fquantity)
-   fprice=request.POST['fprice']
-   fprice=float(fprice)
-   name=request.user.username
-   table='T11'
-   members=1
-   totalPrice=fprice*fquantity
-   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,members=members,total_price=totalPrice,food_image=food_image)
-   checkOrder=Order.objects.filter(name=name,food_name=food_name)
-   if checkOrder.exists():
-      messages.info(request,'already you ordered this food,please update it')
-   else:
-      newOrder.save()
-      messages.info(request,'added to cart successfully')
-   return redirect(reverse('food'))
+
 
 def orderFood(request):
    name=request.POST['fname']
@@ -252,6 +234,25 @@ def drinks(request):
    foods=Snacks.objects.filter(category='Drinks')
    return render(request,'drinks.html',{'foods':foods})
 
+def indianOrder(request):
+   url='indianFood'
+   order(request,url)
+   return redirect(reverse(url))
+
+def arabianOrder(request):
+   url='arabianFood'
+   order(request,url)
+   return redirect(reverse(url))
+
+def europeanOrder(request):
+   url='europeanFood'
+   order(request,url)
+   return redirect(reverse(url))
+
+def drinksOrder(request):
+   url='drinks'
+   order(request,url)
+   return redirect(reverse(url))
 #--------------------------------------------------Helper functions------------------------------------------------------------------
 def checkorder(table,food,name):
    order=Order.objects.filter(table_name=table,food_name=food,name=name)
@@ -288,3 +289,23 @@ def send_email(email,otp):
 def generate_code():
    code=random.randint(1000,9999)
    return code
+
+def order(request,url):
+   food_name=request.POST['foodname']
+   food_image=request.POST['foodimg']
+   fquantity=request.POST['fquantity']
+   fquantity=float(fquantity)
+   fprice=request.POST['fprice']
+   fprice=float(fprice)
+   name=request.user.username
+   table='T11'
+   members=1
+   totalPrice=fprice*fquantity
+   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,members=members,total_price=totalPrice,food_image=food_image)
+   checkOrder=Order.objects.filter(name=name,food_name=food_name)
+   if checkOrder.exists():
+      messages.info(request,'already you ordered this food,please update it')
+   else:
+      newOrder.save()
+      messages.info(request,'added to cart successfully')
+   

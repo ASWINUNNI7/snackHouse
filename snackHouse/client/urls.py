@@ -28,4 +28,8 @@ urlpatterns=[
   path('european',views.europeanFood,name='europeanFood'),
   path('arabian',views.arabianFood,name='arabianFood'),
   path('drinks',views.drinks,name='drinks'),
+  path('indianOrder',views.indianOrder,name='indianOrder'),
+  path('europeanOrder',views.europeanOrder,name='europeanOrder'),
+  path('arabianOrder',views.arabianOrder,name='arabianOrder'),
+  path('drinkOrder',views.drinksOrder,name='drinksOrder')
 ]
