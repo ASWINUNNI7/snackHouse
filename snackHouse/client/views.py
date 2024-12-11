@@ -168,6 +168,45 @@ def orderdetails(request):
    return render(request,'order_details.html',{'orders':order,'clients':client
                                                ,'payments':payments,'rand':random_num})
 
+
+def table_order(request):
+   
+   if request.method == "POST":
+        # Get the selected table and number of members from the form
+      table_name = request.POST.get('table')
+      members = int(request.POST.get('members', 1))  # Default to 1 member if not provided
+
+        # Check if a valid table is selected
+      if table_name == "none":
+         messages.error(request, "Please select a valid table.")
+         return redirect('ordertable')  # Redirect to the same page on error
+
+        # Calculate the total price
+      total_price = members * 10
+
+        # Save the order to the database with food_name="None" and quantity=0
+      table = Tables.objects.get(table_name=table_name)  # Get the table object
+      Order.objects.create(
+            name=request.user.first_name,
+            food_name="None",  # Set food_name to "None"
+            table_name=table.table_name,
+            members=members,
+            quantity=0,  # Set quantity to 0
+            total_price=total_price,
+         )
+
+        # Render the table_details.html with the bill details
+      return render(request, 'table_details.html', {
+            'table_name': table_name,
+            'members': members,
+            'total_price': total_price
+      })
+
+    # Render the order table form with table data
+   tables = Tables.objects.all()
+   return render(request, 'table_order.html', {'tables': tables})
+
+
 def confirmMessage(request):
    name=request.user.first_name
    userpayment=Payment.objects.filter(name=name)
