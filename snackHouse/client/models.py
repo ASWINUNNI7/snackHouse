@@ -14,6 +14,8 @@ class Snacks(models.Model):
   food_image=models.ImageField(upload_to='pics')
   food_name=models.CharField(max_length=100)
   price=models.FloatField()
+  quantity=models.IntegerField(default=20)
+  category=models.CharField(max_length=200,default="Indian")
 
   def __str__(self):
     return self.food_name
@@ -32,6 +34,7 @@ class Order(models.Model):
   members=models.IntegerField(default=1)
   quantity=models.IntegerField(default=1)
   total_price=models.FloatField()
+  food_image=models.ImageField(upload_to='orders',default='null')
 
   def __str__(self):
     return self.name+"-"+self.food_name

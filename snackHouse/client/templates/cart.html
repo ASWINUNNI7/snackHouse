@@ -1,0 +1,41 @@
+{% extends 'home.html' %}
+{% block title %}Food{% endblock %}
+{% block style %}
+<style>
+   body{
+  background-color: rgb(185, 176, 176);
+}
+</style>
+{% for message in messages %}
+<script>
+alert('{{message}}')
+</script>
+{% endfor %}
+{% endblock %}
+{% block content %}
+<div class="container py-4 my-4 ">
+  <h1 class="text-center"><strong>Food Cart</strong></h1>
+  <div class="row">
+    {% for order in orders %}
+    <div class="col-md-3 p-3">
+      <div class="card">
+        <img src="{{order.food_image.url}}" style="height: 150px;
+        object-fit: cover;" class="card-img-top" alt="Card 1">
+        <div class="card-body">
+          <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
+          font-size: 1.5rem;
+          text-transform: uppercase;">{{order.food_name}}</h5>
+          <p class="text-center" style="font-weight: bolder;">Rs {{order.total_price}}</p>
+          <form action="cancelorder" method="post">
+            <input type="hidden" name="foodname" value="{{order.food_name}}">
+   <button type="submit" class="btn btn-danger btn mx-2">Cancel</button>
+  </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <a href="{% url 'food' %}"><button type="button" class="btn btn-secondary btn mx-2">Back</button></a>
+    </div>
+    </div>
+   
+{% endblock %}
