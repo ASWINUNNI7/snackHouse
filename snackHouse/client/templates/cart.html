@@ -5,6 +5,10 @@
    body{
   background-color: rgb(185, 176, 176);
 }
+#update{
+  margin-left: 180px;
+  margin-top: -38px;
+}
 </style>
 {% for message in messages %}
 <script>
@@ -15,6 +19,12 @@ alert('{{message}}')
 {% block content %}
 <div class="container py-4 my-4 ">
   <h1 class="text-center"><strong>Food Cart</strong></h1>
+  {% if orders == 'none' %}
+  <p class="text-center " style="font-weight: bolder;color: red;font-size: 30px;">No items are added</p>
+                  <div class="d-flex justify-content-center">
+              <a href="{% url 'home' %}"><button type="button" class="btn btn-info btn-lg">Order Food</button></a>
+            </div>
+              {% else %}
   <div class="row">
     {% for order in orders %}
     <div class="col-md-3 p-3">
@@ -23,19 +33,38 @@ alert('{{message}}')
         object-fit: cover;" class="card-img-top" alt="Card 1">
         <div class="card-body">
           <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
-          font-size: 1.5rem;
-          text-transform: uppercase;">{{order.food_name}}</h5>
+          font-size: 1.2rem;
+          text-transform: uppercase;"><b>{{order.food_name}}</b></h5>
+          {% if order.category == 'Drinks' %}
+            {% if order.quantity == 1 %}
+           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Glass</p>
+            {% else %}
+           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Glasses</p>
+            {% endif %}
+          {% else %}
+            {% if order.quantity == 1 %}
+           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Piece</p>
+            {% else %}
+           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Pieces</p>
+            {% endif %}
+          {% endif %}
           <p class="text-center" style="font-weight: bolder;">Rs {{order.total_price}}</p>
           <form action="cancelorder" method="post">
             <input type="hidden" name="foodname" value="{{order.food_name}}">
    <button type="submit" class="btn btn-danger btn mx-2">Cancel</button>
   </form>
+  <div id="update">
+  <form action="updateorder" method="post">
+    <input type="hidden" name="foodname" value="{{order.food_name}}">
+<button type="submit" class="btn btn-warning btn mx-2">Update</button>
+</form></div>
         </div>
       </div>
     </div>
     {% endfor %}
     <a href="{% url 'home' %}"><button type="button" class="btn btn-secondary btn mx-2">Back</button></a>
     </div>
+    {% endif %}
     </div>
    
 {% endblock %}
