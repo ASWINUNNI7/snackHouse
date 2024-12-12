@@ -220,6 +220,8 @@ def updateOrderFood(request):
       size=order.quantity-quantity
       snack.quantity=snack.quantity+size
    order.quantity=quantity
+   totalprice=quantity*snack.price
+   order.total_price=totalprice
    snack.save()
    order.save()
    messages.info(request,'order updated')
