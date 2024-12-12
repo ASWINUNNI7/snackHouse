@@ -9,6 +9,10 @@
   margin-left: 180px;
   margin-top: -38px;
 }
+#cancelall{
+  margin-left: 100px;
+  margin-top: -35px;
+}
 </style>
 {% for message in messages %}
 <script>
@@ -63,6 +67,7 @@ alert('{{message}}')
     </div>
     {% endfor %}
     <a href="{% url 'home' %}"><button type="button" class="btn btn-secondary btn mx-2">Back</button></a>
+    <a href="{% url 'cancelAllorder' %}" id="cancelall"><button type="button" class="btn btn-danger btn mx-2">Cancel All</button></a>
     </div>
     {% endif %}
     </div>
