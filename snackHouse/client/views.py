@@ -150,45 +150,6 @@ def orderdetails(request):
    return render(request,'order_details.html',{'orders':order,'clients':client
                                                ,'payments':payments,'rand':random_num})
 
-
-def table_order(request):
-   
-   if request.method == "POST":
-        # Get the selected table and number of members from the form
-      table_name = request.POST.get('table')
-      members = int(request.POST.get('members', 1))  # Default to 1 member if not provided
-
-        # Check if a valid table is selected
-      if table_name == "none":
-         messages.error(request, "Please select a valid table.")
-         return redirect('ordertable')  # Redirect to the same page on error
-
-        # Calculate the total price
-      total_price = members * 10
-
-        # Save the order to the database with food_name="None" and quantity=0
-      table = Tables.objects.get(table_name=table_name)  # Get the table object
-      Order.objects.create(
-            name=request.user.first_name,
-            food_name="None",  # Set food_name to "None"
-            table_name=table.table_name,
-            members=members,
-            quantity=0,  # Set quantity to 0
-            total_price=total_price,
-         )
-
-        # Render the table_details.html with the bill details
-      return render(request, 'table_details.html', {
-            'table_name': table_name,
-            'members': members,
-            'total_price': total_price
-      })
-
-    # Render the order table form with table data
-   tables = Tables.objects.all()
-   return render(request, 'table_order.html', {'tables': tables})
-
-
 def confirmMessage(request):
    name=request.user.first_name
    userpayment=Payment.objects.filter(name=name)
@@ -197,7 +158,11 @@ def confirmMessage(request):
 def cancelOrder(request):
    name=request.user.username
    food=request.POST['foodname']
-   order=Order.objects.filter(name=name,food_name=food)
+   order=Order.objects.get(name=name,food_name=food)
+   addsize=order.quantity
+   snack=Snacks.objects.get(food_name=food)
+   snack.quantity=snack.quantity+addsize
+   snack.save()
    order.delete()
    messages.info(request,'order cancelled')
    return HttpResponseRedirect(reverse('cart'))
@@ -219,23 +184,32 @@ def confirmPayment(request):
    return HttpResponseRedirect(reverse('home'))
 
 def updateOrder(request):
-   name=request.user.first_name
-   food=request.POST['food1']
-   table=request.POST['table1']
-   foodprice=Snacks.objects.filter(food_name=food)
-   order=Order.objects.filter(name=name,food_name=food,table_name=table)
-   return render(request,'updateorder.html',{'updorder':order,'prices':foodprice})
+   name=request.user.username
+   foodname=request.POST['foodname']
+   price=Snacks.objects.get(food_name=foodname).price
+   size=Snacks.objects.get(food_name=foodname).quantity
+   order=Order.objects.get(name=name,food_name=foodname)
+   max=size+order.quantity
+   return render(request,'updateOrder.html',{'food':order,'price':price,'size':max})
 
-def updateorderfood(request):
-   name=request.user.first_name
-   food_name=request.POST['foodname']
-   table=request.POST['table']
-   members=request.POST['members']
-   members=int(members)
-   quantity=request.POST['quantity']
-   price=request.POST['tprice']
-   checktable(request,name,table,members,food_name,price,quantity)
-   return HttpResponseRedirect(reverse('ordertable'))
+def updateOrderFood(request):
+   name=request.user.username
+   fname=request.POST['foodname']
+   quantity=request.POST['fquantity']
+   quantity=int(quantity)
+   order=Order.objects.get(food_name=fname,name=name)
+   snack=Snacks.objects.get(food_name=fname)
+   if order.quantity<quantity:
+      size=quantity-order.quantity
+      snack.quantity=snack.quantity-size
+   else:
+      size=order.quantity-quantity
+      snack.quantity=snack.quantity+size
+   order.quantity=quantity
+   snack.save()
+   order.save()
+   messages.info(request,'order updated')
+   return redirect(reverse('cart'))
 
 def otpPage(request):
    if request.method == 'POST':
@@ -254,7 +228,10 @@ def otpPage(request):
 
 def cart(request):
    name=request.user.username
-   orders=Order.objects.filter(name=name)
+   if Order.objects.filter(name=name):
+      orders=Order.objects.filter(name=name)
+   else:
+      orders='none'
    return render(request,'cart.html',{'orders':orders})
 
 def indianFood(request):
@@ -332,6 +309,7 @@ def generate_code():
 def order(request,url):
    food_name=request.POST['foodname']
    food_image=request.POST['foodimg']
+   category=request.POST['fcategory']
    fquantity=request.POST['fquantity']
    fquantity=float(fquantity)
    fprice=request.POST['fprice']
@@ -340,11 +318,15 @@ def order(request,url):
    table='T11'
    members=1
    totalPrice=fprice*fquantity
-   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,members=members,total_price=totalPrice,food_image=food_image)
+   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,
+                  members=members,total_price=totalPrice,food_image=food_image,category=category)
    checkOrder=Order.objects.filter(name=name,food_name=food_name)
+   food=Snacks.objects.get(food_name=food_name)
+   food.quantity=food.quantity-fquantity
    if checkOrder.exists():
-      messages.info(request,'already you ordered this food,please update it')
+      messages.info(request,'already you ordered this item,please update it')
    else:
+      food.save()
       newOrder.save()
       messages.info(request,'added to cart successfully')
    

@@ -35,6 +35,8 @@ class Order(models.Model):
   quantity=models.IntegerField(default=1)
   total_price=models.FloatField()
   food_image=models.ImageField(upload_to='orders',default='null')
+  category=models.CharField(max_length=200,default="Indian")
+
 
   def __str__(self):
     return self.name+"-"+self.food_name
