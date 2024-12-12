@@ -167,6 +167,20 @@ def cancelOrder(request):
    messages.info(request,'order cancelled')
    return HttpResponseRedirect(reverse('cart'))
 
+def cancelAllorder(request):
+   name=request.user.username
+   orders=Order.objects.filter(name=name)
+   for order in orders:
+      addsize=order.quantity
+      food=order.food_name
+      snack=Snacks.objects.get(food_name=food)
+      snack.quantity=snack.quantity+addsize
+      snack.save()
+      order.delete()
+   messages.info(request,'All orders cancelled')
+   return HttpResponseRedirect(reverse('cart'))
+
+
 def cancelPayment(request):
    name=request.user.first_name
    payment=Payment.objects.filter(name=name)
