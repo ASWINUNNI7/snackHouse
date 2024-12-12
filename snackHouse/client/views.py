@@ -178,7 +178,7 @@ def cancelAllorder(request):
       snack.save()
       order.delete()
    messages.info(request,'All orders cancelled')
-   return HttpResponseRedirect(reverse('cart'))
+   return redirect(reverse('cart'))
 
 
 def cancelPayment(request):
