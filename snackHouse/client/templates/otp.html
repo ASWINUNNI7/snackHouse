@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log In</title>
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   {% for message in messages %}
 <script>
-alert('{{message}}');
+Swal.fire('{{message}}');
 </script>
 {% endfor %}
 </head>
@@ -22,6 +23,7 @@ alert('{{message}}');
       <input type="text" id="password" name="otp" maxlength="4" placeholder="AC-xxxx" required>
       <button id="login" type="submit">Submit</button>
     </form>  
+    <button type="button" class="btn btn-danger btn mx-2">Back</button>
   </div>
 </body>
 </html>
