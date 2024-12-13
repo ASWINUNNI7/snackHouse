@@ -32,9 +32,7 @@ urlpatterns=[
   path('europeanOrder',views.europeanOrder,name='europeanOrder'),
   path('arabianOrder',views.arabianOrder,name='arabianOrder'),
   path('drinkOrder',views.drinksOrder,name='drinksOrder'),
-<<<<<<< HEAD
-  path('cancelAllorder',views.cancelAllorder,name='cancelAllorder')
-=======
+  path('cancelAllorder',views.cancelAllorder,name='cancelAllorder'),
   path('update_credentials',views.update_credentials,name='update_credentials')
->>>>>>> 339520051632f23ebd8a4e4af589c68ad2077f5c
+  
 ]

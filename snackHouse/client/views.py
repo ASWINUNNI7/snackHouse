@@ -349,13 +349,11 @@ def order(request,url):
 def update_credentials(request):
     if request.method == 'POST':
         current_user = request.user
-
         name = request.POST['name']
         mobile = request.POST['mobile']
         username = request.POST['username']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-
         if password1 == password2:
             if User.objects.filter(username=username).exclude(pk=current_user.pk).exists():
                 messages.info(request, 'Username has been taken')
@@ -372,10 +370,12 @@ def update_credentials(request):
                 client.username = username
                 client.password = password1
                 client.save()
+                messages.info(request, 'Your credentials have been updated successfully')
+                return redirect('index')  
 
                 messages.info(request, 'Your credentials have been updated successfully')
                 return redirect('home')  
-        else:
+
             messages.info(request, 'Passwords do not match')
 
     return render(request, 'update_credentials.html')
