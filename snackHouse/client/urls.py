@@ -31,5 +31,6 @@ urlpatterns=[
   path('indianOrder',views.indianOrder,name='indianOrder'),
   path('europeanOrder',views.europeanOrder,name='europeanOrder'),
   path('arabianOrder',views.arabianOrder,name='arabianOrder'),
-  path('drinkOrder',views.drinksOrder,name='drinksOrder')
+  path('drinkOrder',views.drinksOrder,name='drinksOrder'),
+  path('update_credentials',views.update_credentials,name='update_credentials')
 ]

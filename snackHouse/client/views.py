@@ -347,4 +347,38 @@ def order(request,url):
    else:
       newOrder.save()
       messages.info(request,'added to cart successfully')
-   
+
+def update_credentials(request):
+    if request.method == 'POST':
+        current_user = request.user
+
+        name = request.POST['name']
+        mobile = request.POST['mobile']
+        username = request.POST['username']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        if password1 == password2:
+            if User.objects.filter(username=username).exclude(pk=current_user.pk).exists():
+                messages.info(request, 'Username has been taken')
+            else:
+                user = User.objects.get(pk=current_user.pk)
+                user.first_name = name
+                user.username = username
+                user.set_password(password1)
+                user.save()
+
+                client = Client.objects.get(username=current_user.username)
+                client.name = name
+                client.mobile = mobile
+                client.username = username
+                client.password = password1
+                client.save()
+
+                messages.info(request, 'Your credentials have been updated successfully')
+                return redirect('home')  
+        else:
+            messages.info(request, 'Passwords do not match')
+
+    return render(request, 'update_credentials.html')
+ 
