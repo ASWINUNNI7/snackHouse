@@ -3,9 +3,10 @@
 {% block title %}Order Details{% endblock %} 
 {% block style %}
 <link rel="stylesheet" href="{% static 'css/orderdet.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% for message in messages %}
 <script>
-alert('{{message}}');
+Swal.fire('{{message}}');
 </script>
 {% endfor %}
 {% endblock %}

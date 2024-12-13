@@ -26,9 +26,10 @@
   }
   </script>
   {% block style %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   {% for message in messages %}
 <script>
-alert('{{message}}');
+Swal.fire('{{message}}');
 </script>
 {% endfor %}
 <style>
@@ -52,34 +53,43 @@ alert('{{message}}');
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container-fluid">
-      <img class="mx-auto fixed-right" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy1zwSf8ehdwLfOIf6Knq5uWusNKJ_jh9NPQ&s" height="50" width="50" alt="">
-      <a class="navbar-brand" href="{% url 'home' %}">Al Cafe Arabia</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav w-100 justify-content-around">
-          <li class="nav-item">
-            <a class="nav-link " aria-current="page" href="{% url 'home' %}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'habout' %}">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="order" href="{% url 'cart' %}">Orders</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'hcontact' %}">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-          </li>
-          <li style="color: white;"> Hi {{user.first_name}}</li>
-        </ul>
-      </div>
-      </div>
+
+
+        <img class="mx-auto fixed-right" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy1zwSf8ehdwLfOIf6Knq5uWusNKJ_jh9NPQ&s" height="50" width="50" alt="">
+        <a class="navbar-brand" href="{% url 'home' %}">Al Cafe Arabia</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav w-100 justify-content-around">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'habout' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="order" href="{% url 'cart' %}">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hcontact' %}">Contact</a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi {{user.first_name}}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{% url 'update_credentials' %}">Update Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
+
   {% block content %}
   <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
