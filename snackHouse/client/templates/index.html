@@ -67,13 +67,14 @@ window.onclick = function(event) {
 
 </script>
   {% block style %} {% endblock %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     $(document).ready(function(){
       $('.cardimg').click(function(){
-        alert("Please Login to continue")
+        Swal.fire("Please Login to continue")
       });
       $('#order').click(function(){
-        alert("Please Login to continue")
+        Swal.fire("Please Login to continue")
       })
     })
     </script>
