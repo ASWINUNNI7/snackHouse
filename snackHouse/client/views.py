@@ -363,6 +363,7 @@ def update_credentials(request):
                 user.username = username
                 user.set_password(password1)
                 user.save()
+
                 client = Client.objects.get(username=current_user.username)
                 client.name = name
                 client.mobile = mobile
@@ -371,7 +372,10 @@ def update_credentials(request):
                 client.save()
                 messages.info(request, 'Your credentials have been updated successfully')
                 return redirect('index')  
-        else:
+
+                messages.info(request, 'Your credentials have been updated successfully')
+                return redirect('home')  
+
             messages.info(request, 'Passwords do not match')
 
     return render(request, 'update_credentials.html')

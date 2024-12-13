@@ -34,4 +34,5 @@ urlpatterns=[
   path('drinkOrder',views.drinksOrder,name='drinksOrder'),
   path('cancelAllorder',views.cancelAllorder,name='cancelAllorder'),
   path('update_credentials',views.update_credentials,name='update_credentials')
+  
 ]
