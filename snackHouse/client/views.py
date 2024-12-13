@@ -289,7 +289,7 @@ def drinksOrder(request):
 def otpBack(request):
    username=request.user.username
    user=User.objects.get(username=username)
-   client=Client.objects.get(username=username)
+   client=Client.objects.get(username= username)
    otp=Otp.objects.get(email=username)
    logout(request)
    otp.delete()
