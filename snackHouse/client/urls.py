@@ -33,6 +33,7 @@ urlpatterns=[
   path('arabianOrder',views.arabianOrder,name='arabianOrder'),
   path('drinkOrder',views.drinksOrder,name='drinksOrder'),
   path('cancelAllorder',views.cancelAllorder,name='cancelAllorder'),
-  path('update_credentials',views.update_credentials,name='update_credentials')
+  path('update_credentials',views.update_credentials,name='update_credentials'),
+  path('otpBack',views.otpBack,name='otpBack')
   
 ]

@@ -229,9 +229,9 @@ def updateOrderFood(request):
 
 def otpPage(request):
    if request.method == 'POST':
+      email=request.POST['mail']
       otp=request.POST['otp']
       otp=int(otp)
-      email=request.POST['mail']
       details=Otp.objects.get(email=email)
       generateOtp=details.otp
       if otp==generateOtp:
@@ -285,6 +285,19 @@ def drinksOrder(request):
    url='drinks'
    order(request,url)
    return redirect(reverse(url))
+
+def otpBack(request):
+   username=request.user.username
+   user=User.objects.get(username=username)
+   client=Client.objects.get(username=username)
+   otp=Otp.objects.get(email=username)
+   logout(request)
+   otp.delete()
+   client.delete()
+   user.delete()
+   return redirect(reverse('register'))
+   
+
 #--------------------------------------------------Helper functions------------------------------------------------------------------
 def checkorder(table,food,name):
    order=Order.objects.filter(table_name=table,food_name=food,name=name)
@@ -372,10 +385,6 @@ def update_credentials(request):
                 client.save()
                 messages.info(request, 'Your credentials have been updated successfully')
                 return redirect('index')  
-
-                messages.info(request, 'Your credentials have been updated successfully')
-                return redirect('home')  
-
             messages.info(request, 'Passwords do not match')
 
     return render(request, 'update_credentials.html')
