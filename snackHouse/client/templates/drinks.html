@@ -23,7 +23,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% for message in messages %}
 <script>
-Swal.fire('{{message}}')
+  Swal.fire('{{message}}')
 </script>
 {% endfor %}
 {% endblock %}
@@ -31,46 +31,69 @@ Swal.fire('{{message}}')
 <div class="container py-4 my-4 ">
   <div class="row">
     {% for food in foods %}
-    <div class="col-md-3 p-3">
-      <div class="card">
-        <img src="{{food.food_image.url}}" style="height: 150px;
-        object-fit: cover;" class="card-img-top" alt="Card 1">
-        <div class="card-body">
-          <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
-          font-size: 1.2rem;
-          text-transform: uppercase;">{{food.food_name}}</h5>
-          <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
-          <p class="text-center" style="font-weight: bolder;color: red;">{{food.quantity}} left</p>
-          {% if food.quantity == 0 %}
-          <div>
-            <input id="warning" class="text-center" type="text" name="fquantity" value="Come back later" readonly>
-            </div>
-            <br><br>
-            <div class="d-flex justify-content-center"> 
-          <button type="button" class="btn btn-danger btn mx-2">Out of Stock</button>
-          </div>
-          {% else %}
-          <form action="drinkOrder" method="post">
-            <input type="hidden" name="foodname" value="{{food.food_name}}">
-            <input type="hidden" name="foodimg" value="{{food.food_image}}">
-            <input type="hidden" name="fprice" value="{{food.price}}">
-            <input type="hidden" name="fcategory" value="{{food.category}}">
-            <div id="quant">
-              <label for="fquantity">Quantity</label>
-              <input type="number" name="fquantity" min="1" value="1" max="{{food.quantity}}">
-            </div>
-            <br><br>
-            <div class="d-flex justify-content-center"> 
-              <button type="submit" class="btn btn-warning btn mx-2">ORDER</button>
-          </div>
-          </form>
-          {% endif %}
+   {% if table == 'none' %}
+   <div class="col-md-3 p-3">
+    <div class="card">
+      <img src="{{food.food_image.url}}" style="height: 150px;
+      object-fit: cover;" class="card-img-top" alt="Card 1">
+      <div class="card-body">
+        <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
+        font-size: 1.2rem;
+        text-transform: uppercase;">{{food.food_name}}</h5>
+        <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
+        <p class="text-center" style="font-weight: bolder;color: red;">{{food.quantity}} left</p>
+          <div class="d-flex justify-content-center"> 
+        <a href="{% url 'tables' %}"><button type="button" class="btn btn-warning btn mx-2">Book Table</button></a>
         </div>
-      
+        
       </div>
-     
-    </div>
     
+    </div>
+   
+  </div>
+  
+   {% else %}
+   <div class="col-md-3 p-3">
+    <div class="card">
+      <img src="{{food.food_image.url}}" style="height: 150px;
+      object-fit: cover;" class="card-img-top" alt="Card 1">
+      <div class="card-body">
+        <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
+        font-size: 1.2rem;
+        text-transform: uppercase;">{{food.food_name}}</h5>
+        <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
+        <p class="text-center" style="font-weight: bolder;color: red;">{{food.quantity}} left</p>
+        {% if food.quantity == 0 %}
+        <div>
+          <input id="warning" class="text-center" type="text" name="fquantity" value="Come back later" readonly>
+          </div>
+          <br><br>
+          <div class="d-flex justify-content-center"> 
+        <button type="button" class="btn btn-danger btn mx-2">Out of Stock</button>
+        </div>
+        {% else %}
+        <form action="drinkOrder" method="post">
+          <input type="hidden" name="foodname" value="{{food.food_name}}">
+          <input type="hidden" name="foodimg" value="{{food.food_image}}">
+          <input type="hidden" name="fprice" value="{{food.price}}">
+          <input type="hidden" name="fcategory" value="{{food.category}}">
+          <div id="quant">
+          <label for="fquantity">Quantity</label>
+          <input type="number" name="fquantity" min="1" value="1" max="{{food.quantity}}">
+        </div>
+          <br><br>
+          <div class="d-flex justify-content-center"> 
+            <button type="submit" class="btn btn-warning btn mx-2">ORDER</button>
+        </div>
+        </form>
+        {% endif %}
+      </div>
+    
+    </div>
+   
+  </div>
+  
+   {% endif %}
     {% endfor %}
     </div>
     
