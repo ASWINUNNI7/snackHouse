@@ -27,6 +27,9 @@ class Tables(models.Model):
   def __str__(self):
     return self.table_name
   
+  
+
+  
 class Order(models.Model):
   name=models.CharField(max_length=30)
   food_name=models.CharField(max_length=50)
@@ -60,6 +63,13 @@ class Otp(models.Model):
   def __str__(self):
     return self.email
 
+class BookTable(models.Model):
+  name=models.CharField(max_length=100)
+  table=models.CharField(max_length=4)
+  members=models.IntegerField(default=1)
+
+  def __str__(self):
+    return self.name+'-'+self.table
   
 
 

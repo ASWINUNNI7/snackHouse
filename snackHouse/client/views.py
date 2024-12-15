@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout,authenticate
-from .models import Client,Snacks,Tables,Order,Payment,Contact,Otp
+from .models import Client,Snacks,Order,Payment,Contact,Otp,Tables,BookTable
 import random
 from django.core.mail import send_mail
 from django.conf import settings
@@ -251,25 +251,63 @@ def cart(request):
    return render(request,'cart.html',{'orders':orders})
 
 def indianFood(request):
+   email=request.user.username
+   if BookTable.objects.filter(name=email).exists():
+      bookTable=BookTable.objects.get(name=email)
+   else:
+      bookTable='none'
    foods=Snacks.objects.filter(category='Indian')
-   return render(request,'indian.html',{'foods':foods})
+   return render(request,'indian.html',{'foods':foods,'table':bookTable})
+
+def nonIndianFood(request):
+   foods=Snacks.objects.filter(category='Indian')
+   return render(request,'nonIndian.html',{'foods':foods})
 
 def arabianFood(request):
+   email=request.user.username
+   if BookTable.objects.filter(name=email).exists():
+      bookTable=BookTable.objects.get(name=email)
+   else:
+      bookTable='none'
    foods=Snacks.objects.filter(category='Arabian')
-   return render(request,'arabian.html',{'foods':foods})
+   return render(request,'arabian.html',{'foods':foods,'table':bookTable})
+
+def nonArabianFood(request):
+   foods=Snacks.objects.filter(category='Arabian')
+   return render(request,'nonArabian.html',{'foods':foods})
 
 def europeanFood(request):
+   email=request.user.username
+   if BookTable.objects.filter(name=email).exists():
+      bookTable=BookTable.objects.get(name=email)
+   else:
+      bookTable='none'
    foods=Snacks.objects.filter(category='European')
-   return render(request,'european.html',{'foods':foods})
+   return render(request,'european.html',{'foods':foods,'table':bookTable})
+
+def nonEuropeanFood(request):
+   foods=Snacks.objects.filter(category='European')
+   return render(request,'nonEuropean.html',{'foods':foods})
 
 def drinks(request):
+   email=request.user.username
+   if BookTable.objects.filter(name=email).exists():
+      bookTable=BookTable.objects.get(name=email)
+   else:
+      bookTable='none'
    foods=Snacks.objects.filter(category='Drinks')
-   return render(request,'drinks.html',{'foods':foods})
+   return render(request,'drinks.html',{'foods':foods,'table':bookTable})
+
+def nonDrinks(request):
+   foods=Snacks.objects.filter(category='Drinks')
+   return render(request,'nonDrinks.html',{'foods':foods})
 
 def indianOrder(request):
    url='indianFood'
    order(request,url)
    return redirect(reverse(url))
+
+
 
 def arabianOrder(request):
    url='arabianFood'
@@ -297,7 +335,56 @@ def otpBack(request):
    user.delete()
    return redirect(reverse('register'))
    
+def tables(request):
+   email=request.user.username
+   name=request.user.first_name
+   if request.method=='POST':
+      table=request.POST['table']
+      members=request.POST['members']
+      members=int(members)
+      tablesize=Tables.objects.get(table_name=table).quantity
+      if members>tablesize:
+         messages.info(request,'Members are higher than the selected seats')
+      else:
+         bookTable=BookTable(name=email,table=table,members=members)
+         bookTable.save()
+         send_mail(
+               'Table Booking',
+               'Hi '+name+','+'\nYour Table-'+table+' has been booked',
+               settings.EMAIL_HOST_USER,  
+               [email],
+               fail_silently=False
+         )
+         return redirect('home')
+   tables=Tables.objects.all()
+   return render(request,'tables.html',{'tables':tables})
 
+def tableDetails(request):
+   email=request.user.username
+   if BookTable.objects.filter(name=email).exists():
+      bookTable1=BookTable.objects.get(name=email)
+   else:
+      bookTable1='none'
+   return render(request,'table_details.html',{'tables':bookTable1})
+
+def cancelTable(request):
+   username=request.user.username
+   fname=request.user.first_name
+   bookTable=BookTable.objects.get(name=username)
+   table=bookTable.table
+   if Order.objects.filter(name=username).exists():
+      messages.info(request,'Pay/cancel existing orders to cancel table')
+      return redirect('tableDetails')
+   send_mail(
+               'Table Cancelled',
+               'Hi '+fname+','+'\nYour Table-'+table+' has been cancelled',
+               settings.EMAIL_HOST_USER,  
+               [username],
+               fail_silently=False
+         )
+   bookTable.delete()
+   return redirect('home')
+   
 #--------------------------------------------------Helper functions------------------------------------------------------------------
 def checkorder(table,food,name):
    order=Order.objects.filter(table_name=table,food_name=food,name=name)
@@ -344,8 +431,8 @@ def order(request,url):
    fprice=request.POST['fprice']
    fprice=float(fprice)
    name=request.user.username
-   table='T11'
-   members=1
+   table=BookTable.objects.get(name=name).table
+   members=BookTable.objects.get(name=name).members
    totalPrice=fprice*fquantity
    newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,
                   members=members,total_price=totalPrice,food_image=food_image,category=category)
@@ -360,6 +447,9 @@ def order(request,url):
       messages.info(request,'added to cart successfully')
 
 def update_credentials(request):
+    requser=request.user.username
+    client=Client.objects.get(username=requser)
+    clientmob=client.mobile
     if request.method == 'POST':
         current_user = request.user
         name = request.POST['name']
@@ -387,5 +477,5 @@ def update_credentials(request):
                 return redirect('index')  
             messages.info(request, 'Passwords do not match')
 
-    return render(request, 'update_credentials.html')
+    return render(request, 'update_credentials.html',{'mob':clientmob})
  

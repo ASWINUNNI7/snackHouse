@@ -1,0 +1,69 @@
+{% extends 'home.html' %}
+{% block title %}Table Booking{% endblock %}
+{% block style %}
+<style>
+  body{
+    background-image: url('https://i.etsystatic.com/33621198/r/il/6b83ae/4482122675/il_fullxfull.4482122675_i8q0.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  h1{
+    color: grey;
+    font-weight: bolder;
+  }
+  h1:hover{
+    text-decoration: underline;
+    color:#f39c12 ;
+    font-style: italic;
+  }
+  label{
+    color: ghostwhite;
+    font-weight: bolder;
+    font-size: 20px;
+  }
+  label:hover{
+    text-decoration: underline;
+    color:#f39c12 ;
+    font-style: italic;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% for message in messages %}
+<script>
+Swal.fire('{{message}}');
+</script>
+{% endfor %}
+
+{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h1 class="mb-4 text-center">Table</h1>
+  
+  <form method="post" id="orderForm">
+
+    <div class="mb-3">
+      <label for="fname" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" name="fname" value="{{user.first_name}}" readonly>
+    </div>
+
+    <div class="mb-3">
+      <label for="table" class="form-label">Table</label>
+      <select name="table" class="form-select" id="table">
+        <option selected value="none" data-quantity="0">Choose a table</option>
+        {% for table in tables %}
+        <option value="{{table.table_name}}" data-quantity="{{table.quantity}}">
+          {{table.table_name}}-{{table.quantity}} seats
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="members" class="form-label">Members</label>
+      <input type="number" class="form-control" name="members" id="members" value="1" min="1">
+    </div>
+    <!-- Submit Button -->
+    <button style="margin-left: 45%;" type="submit" class="btn btn-primary">Book Table</button>
+  </form>
+</div>
+
+{% endblock %}

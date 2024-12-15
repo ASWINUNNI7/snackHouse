@@ -25,6 +25,10 @@ urlpatterns=[
   path('otp',views.otpPage,name='otpPage'),
   path('cart',views.cart,name='cart'),
   path('indian',views.indianFood,name='indianFood'),
+  path('nonindian',views.nonIndianFood,name='nonIndianFood'),
+  path('nonarabian',views.nonArabianFood,name='nonArabianFood'),
+  path('noneuropean',views.nonEuropeanFood,name='nonEuropeanFood'),
+  path('nondrinks',views.nonDrinks,name='nonDrinks'),
   path('european',views.europeanFood,name='europeanFood'),
   path('arabian',views.arabianFood,name='arabianFood'),
   path('drinks',views.drinks,name='drinks'),
@@ -34,6 +38,8 @@ urlpatterns=[
   path('drinkOrder',views.drinksOrder,name='drinksOrder'),
   path('cancelAllorder',views.cancelAllorder,name='cancelAllorder'),
   path('update_credentials',views.update_credentials,name='update_credentials'),
-  path('otpBack',views.otpBack,name='otpBack' )
-  
+  path('otpBack',views.otpBack,name='otpBack' ),
+  path('tables',views.tables,name='tables' ),
+  path('tableinfo',views.tableDetails,name='tableDetails' ),
+  path('tablecancel',views.cancelTable,name='cancelTable' ),
 ]
