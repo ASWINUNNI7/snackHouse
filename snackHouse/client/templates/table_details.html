@@ -20,6 +20,10 @@
             color: rgb(58, 12, 224);
             font-weight: bolder;
         }
+        #main{
+            height: 720px;
+            width: auto;
+        }
     </style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -31,7 +35,7 @@
     {% endblock %}
 
     {% block content %}
-    <div class="container mt-5">
+    <div id="main" class="container-fluid mt-5">
         <h1 class="mb-5 text-center">Table Reservation</h1>
         {% if tables == 'none' %}
         <div class="card">
