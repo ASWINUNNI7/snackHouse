@@ -355,8 +355,8 @@ def tables(request):
             send_mail(
                   'Table Booking',
                   'Hi '+name+','+'\nYour Table-'+table+' has been booked',
-                  settings.EMAIL_HOST_USER,  
-                  [email],
+                  from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+                  recipient_list=[email],
                   fail_silently=False
             )
             return redirect('home')
@@ -382,8 +382,8 @@ def cancelTable(request):
    send_mail(
                'Table Cancelled',
                'Hi '+fname+','+'\nYour Table-'+table+' has been cancelled',
-               settings.EMAIL_HOST_USER,  
-               [username],
+               from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+               recipient_list=[username],
                fail_silently=False
          )
    bookTable.delete()
@@ -417,8 +417,8 @@ def send_email(email,otp):
    send_mail(
             'VERIFICATION CODE',
             'Your otp for this session:- AC-'+otp,
-            settings.EMAIL_HOST_USER,  
-            [email],
+            from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+            recipient_list=[email],
             fail_silently=False
         )
 
