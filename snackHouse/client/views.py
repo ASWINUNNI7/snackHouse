@@ -389,8 +389,10 @@ def tables(request):
                      fail_silently=False
                )
                return redirect('home')
-   tables=Tables.objects.all()
-   return render(request,'tables.html',{'tables':tables})
+   btables = BookTable.objects.all().values_list('table', flat=True)  
+   tablelist = Tables.objects.exclude(table_name__in=btables)       
+   tlist = list(tablelist)  
+   return render(request,'tables.html',{'tables':tlist})
 
 def tableDetails(request):
    email=request.user.username
