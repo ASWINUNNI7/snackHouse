@@ -94,53 +94,6 @@ def food(request):
    foods=Snacks.objects.all()
    return render(request,'food.html',{'foods':foods})
 
-
-
-def orderFood(request):
-   name=request.POST['fname']
-   food_name=request.POST['foodname']
-   table=request.POST['table']
-   members=request.POST['members']
-   members=int(members)
-   quantity=request.POST['quantity']
-   price=request.POST['tprice']
-   if table=='none':
-      messages.info(request,'Choose a table to continue')
-      return HttpResponseRedirect(reverse('food'))
-   elif checkorder(table,food_name,name):
-      if Order.objects.filter(name=name,table_name=table).exists(): 
-         checktable(request,name,table,members,food_name,price,quantity)
-         return HttpResponseRedirect(reverse('ordertable'))
-      else:
-         if Order.objects.filter(table_name=table).exists():
-            messages.info(request,'This table is already reserved by other')
-            return HttpResponseRedirect(reverse('food'))
-         else:
-            checktable(request,name,table,members,food_name,price,quantity)
-            return HttpResponseRedirect(reverse('food'))
-   else:
-      messages.info(request,'You had already booked this item for the table')
-      return HttpResponseRedirect(reverse('food'))
-
-def ordertable(request):
-   name=request.user.first_name
-   if Order.objects.filter(name=name).exists():
-      orders=Order.objects.filter(name=name)
-   else:
-      orders='none'
-   return render(request,'ordertable.html',{'details':orders})
-
-def payment(request):
-      fname=request.POST['fname']
-      userorder=Order.objects.filter(name=fname).values_list('total_price',flat=True)
-      userorder=list(userorder)
-      amount=0
-      for order in userorder:
-         amount=order+amount
-         newPayment=Payment(name=fname,total_amount=amount)
-      newPayment.save()
-      return HttpResponseRedirect(reverse('confirm'))
-
 def orderdetails(request):
    name=request.user.username
    cname=request.user.first_name
@@ -173,10 +126,6 @@ def orderdetails(request):
    return render(request,'order_details.html',{'orders':order,'clients':client
                                                ,'payments':payments,'rand':random_num, 'total': total})
 
-def confirmMessage(request):
-   name=request.user.first_name
-   userpayment=Payment.objects.filter(name=name)
-   return render(request,'payment_alert.html',{'payments':userpayment})
 
 def cancelOrder(request):
    name=request.user.username
@@ -202,23 +151,6 @@ def cancelAllorder(request):
       order.delete()
    messages.info(request,'All orders cancelled')
    return redirect(reverse('cart'))
-
-
-def cancelPayment(request):
-   name=request.user.first_name
-   payment=Payment.objects.filter(name=name)
-   payment.delete()
-   messages.info(request,'payment cancelled')
-   return HttpResponseRedirect(reverse('ordertable'))
-
-def confirmPayment(request):
-   name=request.user.first_name
-   payment=Payment.objects.filter(name=name)
-   order=Order.objects.filter(name=name)
-   payment.delete()
-   order.delete()
-   messages.info(request,'paid successfully')
-   return HttpResponseRedirect(reverse('home'))
 
 def updateOrder(request):
    name=request.user.username
@@ -420,67 +352,6 @@ def cancelTable(request):
    bookTable.delete()
    return redirect('home')
    
-#--------------------------------------------------Helper functions------------------------------------------------------------------
-def checkorder(table,food,name):
-   order=Order.objects.filter(table_name=table,food_name=food,name=name)
-   if order.exists():
-      return False
-   else:
-      return True
-   
-def checktable(request,name,table,members,food,price,quantity):
-   table_quantity=Tables.objects.filter(table_name=table).values_list('quantity',flat=True)
-   for tabquant in table_quantity:
-      tabquant=int(tabquant)
-      if members<=tabquant:
-         totalprice=float(price)*int(quantity)
-         oldorder=Order.objects.filter(name=name,food_name=food,table_name=table)
-         oldorder.delete()
-         updateorder=Order(name=name,food_name=food,table_name=table,members=members
-                           ,quantity=quantity,total_price=totalprice)
-         updateorder.save()
-         messages.info(request,'order successfully')
-      else:
-         messages.info(request,'Members are higher than the reserved seat')
-
-def send_email(email,otp):
-   otp=str(otp)
-   send_mail(
-            'VERIFICATION CODE',
-            'Your otp for this session:- AC-'+otp,
-            from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
-            recipient_list=[email],
-            fail_silently=False
-        )
-
-def generate_code():
-   code=random.randint(1000,9999)
-   return code
-
-def order(request,url):
-   food_name=request.POST['foodname']
-   food_image=request.POST['foodimg']
-   category=request.POST['fcategory']
-   fquantity=request.POST['fquantity']
-   fquantity=float(fquantity)
-   fprice=request.POST['fprice']
-   fprice=float(fprice)
-   name=request.user.username
-   table=BookTable.objects.get(name=name).table
-   members=BookTable.objects.get(name=name).members
-   totalPrice=fprice*fquantity
-   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,
-                  members=members,total_price=totalPrice,food_image=food_image,category=category)
-   checkOrder=Order.objects.filter(name=name,food_name=food_name)
-   food=Snacks.objects.get(food_name=food_name)
-   food.quantity=food.quantity-fquantity
-   if checkOrder.exists():
-      messages.info(request,'already you ordered this item,please update it')
-   else:
-      food.save()
-      newOrder.save()
-      messages.info(request,'added to cart successfully')
-
 def update_credentials(request):
     requser=request.user.username
     client=Client.objects.get(username=requser)
@@ -526,3 +397,43 @@ def profileview(request):
         mobile = clientmob
 
     return render(request, 'profileview.html', {'name': name, 'username': username, 'email': email, 'mobile': mobile})
+#--------------------------------------------------Helper functions------------------------------------------------------------------
+
+def send_email(email,otp):
+   otp=str(otp)
+   send_mail(
+            'VERIFICATION CODE',
+            'Your otp for this session:- AC-'+otp,
+            from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+            recipient_list=[email],
+            fail_silently=False
+        )
+
+def generate_code():
+   code=random.randint(1000,9999)
+   return code
+
+def order(request,url):
+   food_name=request.POST['foodname']
+   food_image=request.POST['foodimg']
+   category=request.POST['fcategory']
+   fquantity=request.POST['fquantity']
+   fquantity=float(fquantity)
+   fprice=request.POST['fprice']
+   fprice=float(fprice)
+   name=request.user.username
+   table=BookTable.objects.get(name=name).table
+   members=BookTable.objects.get(name=name).members
+   totalPrice=fprice*fquantity
+   newOrder=Order(name=name,food_name=food_name,quantity=fquantity,table_name=table,
+                  members=members,total_price=totalPrice,food_image=food_image,category=category)
+   checkOrder=Order.objects.filter(name=name,food_name=food_name)
+   food=Snacks.objects.get(food_name=food_name)
+   food.quantity=food.quantity-fquantity
+   if checkOrder.exists():
+      messages.info(request,'already you ordered this item,please update it')
+   else:
+      food.save()
+      newOrder.save()
+      messages.info(request,'added to cart successfully')
+
