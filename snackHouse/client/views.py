@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout,authenticate
-from .models import Client,Snacks,Order,Payment,Contact,Otp,Tables,BookTable
+from .models import Client,Snacks,Order,Contact,Otp,Tables,BookTable
 import random
 from django.core.mail import send_mail
 from django.conf import settings
@@ -99,7 +99,6 @@ def orderdetails(request):
    cname=request.user.first_name
    order=Order.objects.filter(name=name)
    client=Client.objects.filter(name=cname)
-   payments=Payment.objects.filter(name=name)
    random_num=random.randint(10000,99999)
    booktable=BookTable.objects.get(name=name)
    total=0.0
@@ -112,7 +111,7 @@ def orderdetails(request):
             total=str(total)
             send_mail(
             'Bill Payment',
-            'Your bill of Rs'+total+' has been successfully paid \n Visit Again!!',
+            'Your bill of Rs. '+total+' has been successfully paid \n Visit Again!!',
             from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
             recipient_list=[name],
             fail_silently=False
@@ -124,7 +123,7 @@ def orderdetails(request):
             messages.info(request, "You can now update your order.")
             return redirect('cart')  
    return render(request,'order_details.html',{'orders':order,'clients':client
-                                               ,'payments':payments,'rand':random_num, 'total': total})
+                                               ,'rand':random_num, 'total': total})
 
 
 def cancelOrder(request):
