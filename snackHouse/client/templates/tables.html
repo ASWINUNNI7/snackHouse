@@ -49,7 +49,7 @@ Swal.fire('{{message}}');
     <div class="mb-3">
       <label for="table" class="form-label">Table</label>
       <select name="table" class="form-select" id="table">
-        <option selected value="none" data-quantity="0">Choose a table</option>
+        <option selected value="default" data-quantity="0">Choose a table</option>
         {% for table in tables %}
         <option value="{{table.table_name}}" data-quantity="{{table.quantity}}">
           {{table.table_name}}-{{table.quantity}} seats

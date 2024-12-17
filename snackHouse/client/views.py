@@ -342,24 +342,27 @@ def tables(request):
       table=request.POST['table']
       members=request.POST['members']
       members=int(members)
-      tablesize=Tables.objects.get(table_name=table).quantity
-      if members>tablesize:
-         messages.info(request,'Members are higher than the selected seats')
+      if table == 'default':
+         messages.info(request,'Choose a table')
       else:
-         if BookTable.objects.filter(table=table).exists():
-            messages.info(request,'This table is booked by other user')
-            return redirect('tables')
+         tablesize=Tables.objects.get(table_name=table).quantity
+         if members>tablesize:
+            messages.info(request,'Members are higher than the selected seats')
          else:
-            bookTable=BookTable(name=email,table=table,members=members)
-            bookTable.save()
-            send_mail(
-                  'Table Booking',
-                  'Hi '+name+','+'\nYour Table-'+table+' has been booked',
-                  from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
-                  recipient_list=[email],
-                  fail_silently=False
-            )
-            return redirect('home')
+            if BookTable.objects.filter(table=table).exists():
+               messages.info(request,'This table is booked by other user')
+               return redirect('tables')
+            else:
+               bookTable=BookTable(name=email,table=table,members=members)
+               bookTable.save()
+               send_mail(
+                     'Table Booking',
+                     'Hi '+name+','+'\nYour Table-'+table+' has been booked',
+                     from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+                     recipient_list=[email],
+                     fail_silently=False
+               )
+               return redirect('home')
    tables=Tables.objects.all()
    return render(request,'tables.html',{'tables':tables})
 
