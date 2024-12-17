@@ -142,13 +142,36 @@ def payment(request):
       return HttpResponseRedirect(reverse('confirm'))
 
 def orderdetails(request):
-   name=request.user.first_name
+   name=request.user.username
+   cname=request.user.first_name
    order=Order.objects.filter(name=name)
-   client=Client.objects.filter(name=name)
+   client=Client.objects.filter(name=cname)
    payments=Payment.objects.filter(name=name)
    random_num=random.randint(10000,99999)
+   booktable=BookTable.objects.get(name=name)
+   total=0.0
+   for item in order:
+         total=total+item.total_price
+   if request.method == 'POST':
+        if 'ok_pay' in request.POST:  
+            order.delete() 
+            booktable.delete() 
+            total=str(total)
+            send_mail(
+            'Bill Payment',
+            'Your bill of Rs'+total+' has been successfully paid \n Visit Again!!',
+            from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+            recipient_list=[name],
+            fail_silently=False
+        )
+            messages.success(request, "Payment successful!")
+            return redirect('home')  
+        
+        elif 'update_order' in request.POST: 
+            messages.info(request, "You can now update your order.")
+            return redirect('cart')  
    return render(request,'order_details.html',{'orders':order,'clients':client
-                                               ,'payments':payments,'rand':random_num})
+                                               ,'payments':payments,'rand':random_num, 'total': total})
 
 def confirmMessage(request):
    name=request.user.first_name
@@ -244,11 +267,14 @@ def otpPage(request):
 
 def cart(request):
    name=request.user.username
+   total=0.0
    if Order.objects.filter(name=name):
       orders=Order.objects.filter(name=name)
+      for order in orders:
+         total=total+order.total_price
    else:
       orders='none'
-   return render(request,'cart.html',{'orders':orders})
+   return render(request,'cart.html',{'orders':orders, 'total': total})
 
 def indianFood(request):
    email=request.user.username
@@ -486,3 +512,15 @@ def update_credentials(request):
 
     return render(request, 'update_credentials.html',{'mob':clientmob})
  
+def profileview(request):
+    current_user = request.user
+    client = Client.objects.get(username=current_user.username)
+    clientmob = client.mobile
+
+    if request.method == 'GET':
+        name = current_user.first_name
+        username = current_user.username
+        email = current_user.email
+        mobile = clientmob
+
+    return render(request, 'profileview.html', {'name': name, 'username': username, 'email': email, 'mobile': mobile})

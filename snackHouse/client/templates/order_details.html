@@ -6,7 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% for message in messages %}
 <script>
-Swal.fire('{{message}}');
+alert('{{message}}');
 </script>
 {% endfor %}
 {% endblock %}
@@ -18,7 +18,7 @@ Swal.fire('{{message}}');
             <div class="order-summary">
                 <h2>Order Summary</h2>
                 <p>Order Number: <span>#{{rand}}</span></p>
-                <p>Status: <span class="status">Paid</span></p>
+                <!-- <p>Status: <span class="status">Paid</span></p> -->
             </div>
 
             <div class="user-info d-flex">
@@ -26,7 +26,7 @@ Swal.fire('{{message}}');
                 {% for client in clients %}
                 <p>Name: <span>{{client.name}}</span></p>
                 <p>Mobile: <span>{{client.mobile}}</span></p>
-                <p>Email: <span>{{user.username}}</span></p>
+                <p>Email: <span>{{client.username}}</span></p>
                 {% endfor %}
             </div>
             </div>
@@ -43,12 +43,12 @@ Swal.fire('{{message}}');
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in orders %}
+                    {% for item in orders %}
                     <tr>
-                        <td>{{order.food_name}}</td>
-                        <td>{{order.table_name}}</td>
-                        <td>{{order.quantity}}</td>
-                        <td>{{order.total_price}}</td>
+                        <td>{{item.food_name}}</td>
+                        <td>{{item.table_name}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.total_price}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -56,14 +56,24 @@ Swal.fire('{{message}}');
         </div>
         <div class="order-total">
             <h2>Order Total Price</h2>
-            {% for payment in payments %}
-            <p><strong>Total: <span> Rs {{payment.total_amount}}</span></strong></p>
-            {% endfor %}
+            <p><strong><span> Rs {{total}}</span></strong></p>
+            
             
         </div>
        
-        <div class="d-flex justify-content-center"> 
-            <a class="btn btn-success btn-lg mx-2" href="{% url 'confirmpay' %}" role="button">OK</a>
-        </div>
+        <div class="d-flex justify-content-center">
+    <!-- OK Pay Button -->
+    <form method="POST" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" name="ok_pay" class="btn btn-success btn-lg mx-2">OK Pay</button>
+    </form>
+
+    <!-- Update Order Button -->
+    <form method="POST" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" name="update_order" class="btn btn-warning btn-lg mx-2">Update Order</button>
+    </form>
+</div>
+
     </div>
 {% endblock %}

@@ -91,7 +91,7 @@ Swal.fire('{{message}}');
                         Hi {{user.first_name}}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="{% url 'update_credentials' %}">Update Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'profileview' %}">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                     </ul>

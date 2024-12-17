@@ -1,0 +1,63 @@
+{% extends 'hcontact.html' %}
+{% block new %}
+<style>
+  .table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Ensures elements stack vertically */
+    height: 100vh; /* Full viewport height */
+  }
+
+  .table {
+    width: 60%; /* Makes the table larger */
+    border-collapse: collapse;
+    margin: 20px 0; /* Adds space above and below the table */
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 1.2rem; /* Increases text size for better readability */
+  }
+
+  .table th, .table td {
+    padding: 12px 15px; /* Adds padding inside cells */
+    border: 1px solid #ddd;
+  }
+
+  .table th {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+
+  button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px; /* Adds space between the table and the button */
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+</style>
+<div class="table-container">
+  <table class="table table-striped">
+      <tr>
+        <th scope="col">Full Name</th>
+        <td>{{ user.first_name }}</td>        
+      </tr>
+      <tr>
+        <th scope="col">Mobile</th>
+        <td>{{ mobile }}</td>
+      </tr>
+      <tr>
+        <th scope="col">Username</th>
+        <td>{{ user.username }}</td>
+      </tr>
+  </table>
+  <a href="{% url 'update_credentials' %}"><button>Update Profile</button></a>
+</div>
+{% endblock %}

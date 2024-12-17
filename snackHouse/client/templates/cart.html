@@ -72,5 +72,12 @@ Swal.fire("{{message}}")
     </div>
     {% endif %}
     </div>
-   
+    {% if total == 0.0 %}
+    <p></p>
+    {% else %}
+    <center>
+      <p><strong>Total Amount: Rs {{total}}</strong></p>
+      <a href="{% url 'orderdetails'%}"><button type="button" class="btn btn-primary btn mx-2">Pay Bill</button></a>
+    </center>
+    {% endif %}
 {% endblock %}

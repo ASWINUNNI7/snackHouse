@@ -84,6 +84,7 @@ body{
 {% endblock %}
 {% block content %}
 <div class="contact-section">
+  {% block new %}
   <h2>Contact Us</h2>
   <p class="text-center">We'd love to hear from you. Please reach out with any questions or feedback.</p>
 
@@ -111,6 +112,7 @@ body{
       </form>
     </div>
   </div>
+  {% endblock %}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% for message in messages %}
