@@ -44,12 +44,7 @@ class Order(models.Model):
   def __str__(self):
     return self.name+"-"+self.food_name
 
-class Payment(models.Model):
-  name=models.CharField(max_length=30)
-  total_amount=models.FloatField()
 
-  def __str__(self):
-    return self.name
 
 class Contact(models.Model):
   name=models.CharField(max_length=40)
