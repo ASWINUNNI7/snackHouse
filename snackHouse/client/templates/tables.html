@@ -37,33 +37,44 @@ Swal.fire('{{message}}');
 {% endblock %}
 {% block content %}
 <div class="container mt-5">
-  <h1 class="mb-4 text-center">Table</h1>
-  
-  <form method="post" id="orderForm">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="mb-4 text-center">Table Booking</h1>
 
-    <div class="mb-3">
-      <label for="fname" class="form-label">Name</label>
-      <input type="text" class="form-control" id="name" name="fname" value="{{user.first_name}}" readonly>
-    </div>
+      <form method="post" id="orderForm" class="p-4 border rounded bg-light shadow-sm">
+        <!-- Name Field -->
+        <div class="mb-3">
+          <label for="fname" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="fname" value="{{user.first_name}}" readonly>
+        </div>
 
-    <div class="mb-3">
-      <label for="table" class="form-label">Table</label>
-      <select name="table" class="form-select" id="table">
-        <option selected value="default" data-quantity="0">Choose a table</option>
-        {% for table in tables %}
-        <option value="{{table.table_name}}" data-quantity="{{table.quantity}}">
-          {{table.table_name}}-{{table.quantity}} seats
-        </option>
-        {% endfor %}
-      </select>
+        <!-- Table Selection Field -->
+        <div class="mb-3">
+          <label for="table" class="form-label">Table</label>
+          <select name="table" class="form-select" id="table">
+            <option selected value="default" data-quantity="0">Choose a table</option>
+            {% for table in tables %}
+            <option value="{{table.table_name}}" data-quantity="{{table.quantity}}">
+              {{table.table_name}} - {{table.quantity}} seats
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Members Field -->
+        <div class="mb-3">
+          <label for="members" class="form-label">Members</label>
+          <input type="number" class="form-control" name="members" id="members" value="1" min="1">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary w-50">Book Table</button>
+        </div>
+      </form>
     </div>
-    <div class="mb-3">
-      <label for="members" class="form-label">Members</label>
-      <input type="number" class="form-control" name="members" id="members" value="1" min="1">
-    </div>
-    <!-- Submit Button -->
-    <button style="margin-left: 45%;" type="submit" class="btn btn-primary">Book Table</button>
-  </form>
+  </div>
 </div>
+
 
 {% endblock %}
