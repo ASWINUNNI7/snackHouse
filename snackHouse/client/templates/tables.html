@@ -25,7 +25,10 @@
     text-decoration: underline;
     color:#f39c12 ;
     font-style: italic;
-  }
+  }#main{
+            height: 850px;
+            width: auto;
+        }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% for message in messages %}
@@ -36,8 +39,8 @@ Swal.fire('{{message}}');
 
 {% endblock %}
 {% block content %}
-<div class="container mt-5">
-  <div class="row justify-content-center">
+<div class="container-fluid mt-5">
+  <div class="row justify-content-center" id="main">
     <div class="col-md-6">
       <h1 class="mb-4 text-center">Table Booking</h1>
 
