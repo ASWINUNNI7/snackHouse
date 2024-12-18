@@ -5,29 +5,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log In</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
- 
+  
   {% for message in messages %}
-<script>
-alert('{{message}}');
-</script>
-{% endfor %}
+  <script>
+    alert('{{ message }}');
+  </script>
+  {% endfor %}
 </head>
-<body>
-  <div class="login-section">
-    <img style="margin-left: 25%;" src="{% static 'images/minipro_icon.gif' %}" alt="">
-    
-    <form method="POST" class="login-form">
-      <label for="email">Username</label>
-      <input type="email" id="email" name="username" placeholder="@gmail.com" required >
+<body class="bg-dark text-white">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="login-section bg-secondary rounded p-5 shadow-lg" id="main" style="max-width: 400px; width: 100%;">
+      <!-- Logo -->
+      <div class="text-center mb-4">
+        <img src="{% static 'images/minipro_icon.gif' %}" alt="Logo" class="img-fluid" style="max-height: 100px;">
+      </div>
+      
+      <!-- Login Form -->
+      <form method="POST" class="login-form">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="email" class="form-label">Username</label>
+          <input type="email" id="email" name="username" class="form-control" placeholder="example@gmail.com" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="**********" required>
+        </div>
+        <button id="login" type="submit" class="btn btn-primary w-100">Login</button>
+      </form>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="**********" required>
-      <button id="login" type="submit">Login</button>
-    </form>
-    <p style="color: whitesmoke;text-align: center;font-size: 25px;">OR</p>
-    <a href="{% url 'register' %}"><button id="register" type="button">Register</button></a>
-    
+      <!-- Separator -->
+      <div class="text-center my-3">
+        <p class="mb-0">OR</p>
+      </div>
+
+      <!-- Register Button -->
+      <div class="text-center">
+        <a href="{% url 'register' %}" class="btn btn-warning w-100">Register</a>
+      </div>
+    </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

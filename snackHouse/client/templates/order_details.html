@@ -11,69 +11,80 @@ alert('{{message}}');
 {% endfor %}
 {% endblock %}
 {% block content %}
-    <div class="order-details-container py-5 my-5">
-        <img class="fixed-right" style="margin-top: -20px;height: 40px;width: 40px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy1zwSf8ehdwLfOIf6Knq5uWusNKJ_jh9NPQ&s" height="50" width="50" alt="">
-        <h1 class="text-center" style="text-decoration: underline;position: absolute;margin-left: 20%;margin-top:-50px;">Bill Details</h1>
-        <div class="order-info">
-            <div class="order-summary">
-                <h2>Order Summary</h2>
-                <p>Order Number: <span>#{{rand}}</span></p>
-                <!-- <p>Status: <span class="status">Paid</span></p> -->
-            </div>
 
-            <div class="user-info d-flex">
-                <div class="mx-5">
-                {% for client in clients %}
-                <p>Name: <span>{{client.name}}</span></p>
-                <p>Mobile: <span>{{client.mobile}}</span></p>
-                <p>Email: <span>{{client.username}}</span></p>
-                {% endfor %}
-            </div>
-            </div>
+  <div class="container my-5">
+    <div class="order-details-container py-5" id="main">
+      <!-- Logo -->
+      <img class="fixed-right" style="height: 40px; width: 40px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy1zwSf8ehdwLfOIf6Knq5uWusNKJ_jh9NPQ&s" alt="Logo">
+
+      <!-- Title -->
+      <h1 class="text-center mb-4">Bill Details</h1>
+
+      <!-- Order Info -->
+      <div class="order-info row mb-4">
+        <div class="order-summary col-md-6">
+          <h2>Order Summary</h2>
+          <p>Order Number: <span>#{{ rand }}</span></p>
+          <!-- <p>Status: <span class="badge bg-success">Paid</span></p> -->
         </div>
-
-        <div class="order-items">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Table</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in orders %}
-                    <tr>
-                        <td>{{item.food_name}}</td>
-                        <td>{{item.table_name}}</td>
-                        <td>{{item.quantity}}</td>
-                        <td>{{item.total_price}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="user-info col-md-6">
+          <h2>User Information</h2>
+          <div>
+            {% for client in clients %}
+            <p>Name: <span>{{ client.name }}</span></p>
+            <p>Mobile: <span>{{ client.mobile }}</span></p>
+            <p>Email: <span>{{ client.username }}</span></p>
+            {% endfor %}
+          </div>
         </div>
-        <div class="order-total">
-            <h2>Order Total Price</h2>
-            <p><strong><span> Rs {{total}}</span></strong></p>
-            
-            
-        </div>
-       
-        <div class="d-flex justify-content-center">
-    <!-- OK Pay Button -->
-    <form method="POST" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit" name="ok_pay" class="btn btn-success btn-lg mx-2">OK Pay</button>
-    </form>
+      </div>
 
-    <!-- Update Order Button -->
-    <form method="POST" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit" name="update_order" class="btn btn-warning btn-lg mx-2">Update Order</button>
-    </form>
-</div>
+      <!-- Order Items -->
+      <div class="order-items mb-4">
+        <h2>Order Items</h2>
+        <table class="table table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>Item</th>
+              <th>Table</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in orders %}
+            <tr>
+              <td>{{ item.food_name }}</td>
+              <td>{{ item.table_name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.total_price }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
+      <!-- Order Total -->
+      <div class="order-total mb-4">
+        <h2>Order Total Price</h2>
+        <p><strong><span>Rs {{ total }}</span></strong></p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-center">
+        <!-- OK Pay Button -->
+        <form method="POST" class="me-2">
+          {% csrf_token %}
+          <button type="submit" name="ok_pay" class="btn btn-success btn-lg">OK Pay</button>
+        </form>
+
+        <!-- Update Order Button -->
+        <form method="POST">
+          {% csrf_token %}
+          <button type="submit" name="update_order" class="btn btn-warning btn-lg">Update Order</button>
+        </form>
+      </div>
     </div>
+  </div>
+
 {% endblock %}

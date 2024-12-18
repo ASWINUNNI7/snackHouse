@@ -154,7 +154,7 @@ def updateOrder(request):
    size=Snacks.objects.get(food_name=foodname).quantity
    order=Order.objects.get(name=name,food_name=foodname)
    max=size+order.quantity
-   return render(request,'updateOrder.html',{'food':order,'price':price,'size':max})
+   return render(request,'updateorder.html',{'food':order,'price':price,'size':max})
 
 def updateOrderFood(request):
    name=request.user.username
