@@ -69,15 +69,8 @@ alert("{{message}}")
     {% endfor %}
     <a href="{% url 'home' %}"><button type="button" class="btn btn-secondary btn mx-2">Back</button></a>
     <a href="{% url 'cancelAllorder' %}" id="cancelall"><button type="button" class="btn btn-danger btn mx-2">Cancel All</button></a>
-    </div>
+    <a href="{% url 'orderdetails'%}"><button type="button" class="btn btn-primary btn mx-2">Pay Bill</button></a></div>
     {% endif %}
     </div>
-    {% if total == 0.0 %}
-    <p></p>
-    {% else %}
-    <center>
-      <p><strong>Total Amount: Rs {{total}}</strong></p>
-      <a href="{% url 'orderdetails'%}"><button type="button" class="btn btn-primary btn mx-2">Pay Bill</button></a>
-    </center>
-    {% endif %}
+    
 {% endblock %}
