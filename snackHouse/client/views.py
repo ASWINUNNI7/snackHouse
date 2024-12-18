@@ -62,7 +62,6 @@ def login_view(request):
       user=authenticate(username=username,password=password)
       if user is not None:
          login(request,user)
-         messages.info(request,'Logged in successfully')
          return redirect('home')
       else:
          message='invalid credentials'
@@ -71,7 +70,6 @@ def login_view(request):
 
 def logout_view(request):
    logout(request)
-   messages.info(request,'Logged out successfully')
    return redirect('index')
 
 def home(request):
@@ -120,7 +118,6 @@ def orderdetails(request):
             return redirect('home')  
         
         elif 'update_order' in request.POST: 
-            messages.info(request, "You can now update your order.")
             return redirect('cart')  
    return render(request,'order_details.html',{'orders':order,'clients':client
                                                ,'rand':random_num, 'total': total})
@@ -135,7 +132,6 @@ def cancelOrder(request):
    snack.quantity=snack.quantity+addsize
    snack.save()
    order.delete()
-   messages.info(request,'order cancelled')
    return HttpResponseRedirect(reverse('cart'))
 
 def cancelAllorder(request):
@@ -178,7 +174,6 @@ def updateOrderFood(request):
    order.total_price=totalprice
    snack.save()
    order.save()
-   messages.info(request,'order updated')
    return redirect(reverse('cart'))
 
 def otpPage(request):
@@ -306,20 +301,16 @@ def tables(request):
          if members>tablesize:
             messages.info(request,'Members are higher than the selected seats')
          else:
-            if BookTable.objects.filter(table=table).exists():
-               messages.info(request,'This table is booked by other user')
-               return redirect('tables')
-            else:
-               bookTable=BookTable(name=email,table=table,members=members)
-               bookTable.save()
-               send_mail(
-                     'Table Booking',
-                     'Hi '+name+','+'\nYour Table-'+table+' has been booked',
-                     from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
-                     recipient_list=[email],
-                     fail_silently=False
-               )
-               return redirect('home')
+            bookTable=BookTable(name=email,table=table,members=members)
+            bookTable.save()
+            send_mail(
+                  'Table Booking',
+                  'Hi '+name+','+'\nYour Table-'+table+' has been booked',
+                  from_email='AL Cafe Arabia <'+settings.EMAIL_HOST_USER+'>',
+                  recipient_list=[email],
+                  fail_silently=False
+            )
+            return redirect('home')
    btables = BookTable.objects.all().values_list('table', flat=True)  
    tablelist = Tables.objects.exclude(table_name__in=btables)       
    tlist = list(tablelist)  
@@ -381,20 +372,17 @@ def update_credentials(request):
                 messages.info(request, 'Your credentials have been updated successfully')
                 return redirect('index')  
             messages.info(request, 'Passwords do not match')
-
     return render(request, 'update_credentials.html',{'mob':clientmob})
  
 def profileview(request):
     current_user = request.user
     client = Client.objects.get(username=current_user.username)
     clientmob = client.mobile
-
     if request.method == 'GET':
         name = current_user.first_name
         username = current_user.username
         email = current_user.email
         mobile = clientmob
-
     return render(request, 'profileview.html', {'name': name, 'username': username, 'email': email, 'mobile': mobile})
 #--------------------------------------------------Helper functions------------------------------------------------------------------
 
@@ -434,5 +422,5 @@ def order(request,url):
    else:
       food.save()
       newOrder.save()
-      messages.info(request,'added to cart successfully')
+      messages.info(request,'item added to cart')
 
