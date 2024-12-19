@@ -2,101 +2,89 @@
 {% block title %}Food{% endblock %}
 {% block style %}
 <style>
-   body{
-  background-color: rgb(185, 176, 176);
-}
+  body {
+    background-color: rgb(185, 176, 176);
+  }
   .card {
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-#warning{
-  margin-left: 35px;
-}
-#quant{
-  margin-left: 60px;
-}
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  #warning {
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+  }
+  #quant {
+    margin-top: 10px;
+    text-align: center;
+  }
 </style>
 
 {% for message in messages %}
 <script>
-  alert('{{message}}')
+  alert('{{message}}');
 </script>
 {% endfor %}
 {% endblock %}
+
 {% block content %}
-<div class="container py-4 my-4 ">
+<div class="container py-4 my-4">
   <div class="row">
     {% for food in foods %}
-   {% if table == 'none' %}
-   <div class="col-md-3 p-3">
-    <div class="card">
-      <img src="{{food.food_image.url}}" style="height: 150px;
-      object-fit: cover;" class="card-img-top" alt="Card 1">
-      <div class="card-body">
-        <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
-        font-size: 1.2rem;
-        text-transform: uppercase;">{{food.food_name}}</h5>
-        <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
-        <p class="text-center" style="font-weight: bolder;color: red;">{{food.quantity}} left</p>
-          <div class="d-flex justify-content-center"> 
-        <a href="{% url 'tables' %}"><button type="button" class="btn btn-warning btn mx-2">Book Table</button></a>
-        </div>
-        
-      </div>
-    
-    </div>
-   
-  </div>
-  
-   {% else %}
-   <div class="col-md-3 p-3">
-    <div class="card">
-      <img src="{{food.food_image.url}}" style="height: 150px;
-      object-fit: cover;" class="card-img-top" alt="Card 1">
-      <div class="card-body">
-        <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
-        font-size: 1.2rem;
-        text-transform: uppercase;">{{food.food_name}}</h5>
-        <p class="text-center" style="font-weight: bolder;">Rs {{food.price}}</p>
-        <p class="text-center" style="font-weight: bolder;color: red;">{{food.quantity}} left</p>
-        {% if food.quantity == 0 %}
-        <div>
-          <input id="warning" class="text-center" type="text" name="fquantity" value="Come back later" readonly>
+      {% if table == 'none' %}
+      <div class="col-md-3 col-sm-6 mb-4">
+        <div class="card">
+          <img src="{{food.food_image.url}}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Food Image">
+          <div class="card-body">
+            <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; text-transform: uppercase;">{{food.food_name}}</h5>
+            <p class="text-center font-weight-bold">Rs {{food.price}}</p>
+            <p class="text-center font-weight-bold text-danger">{{food.quantity}} left</p>
+            <div class="d-flex justify-content-center">
+              <a href="{% url 'tables' %}">
+                <button type="button" class="btn btn-warning">Book Table</button>
+              </a>
+            </div>
           </div>
-          <br><br>
-          <div class="d-flex justify-content-center"> 
-        <button type="button" class="btn btn-danger btn mx-2">Out of Stock</button>
         </div>
-        {% else %}
-        <form action="drinkOrder" method="post">
-          <input type="hidden" name="foodname" value="{{food.food_name}}">
-          <input type="hidden" name="foodimg" value="{{food.food_image}}">
-          <input type="hidden" name="fprice" value="{{food.price}}">
-          <input type="hidden" name="fcategory" value="{{food.category}}">
-          <div id="quant">
-          <label for="fquantity">Quantity</label>
-          <input type="number" name="fquantity" min="1" value="1" max="{{food.quantity}}">
-        </div>
-          <br><br>
-          <div class="d-flex justify-content-center"> 
-            <button type="submit" class="btn btn-warning btn mx-2">ORDER</button>
-        </div>
-        </form>
-        {% endif %}
       </div>
-    
-    </div>
-   
-  </div>
-  
-   {% endif %}
+      {% else %}
+      <div class="col-md-3 col-sm-6 mb-4">
+        <div class="card">
+          <img src="{{food.food_image.url}}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="Food Image">
+          <div class="card-body">
+            <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; text-transform: uppercase;">{{food.food_name}}</h5>
+            <p class="text-center font-weight-bold">Rs {{food.price}}</p>
+            <p class="text-center font-weight-bold text-danger">{{food.quantity}} left</p>
+            {% if food.quantity == 0 %}
+            <div class="text-center">
+              <input id="warning" type="text" value="Come back later" readonly class="form-control">
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+              <button type="button" class="btn btn-danger">Out of Stock</button>
+            </div>
+            {% else %}
+            <form action="drinkOrder" method="post">
+              <input type="hidden" name="foodname" value="{{food.food_name}}">
+              <input type="hidden" name="foodimg" value="{{food.food_image}}">
+              <input type="hidden" name="fprice" value="{{food.price}}">
+              <input type="hidden" name="fcategory" value="{{food.category}}">
+              <div id="quant">
+                <label for="fquantity" class="form-label">Quantity</label>
+                <input type="number" name="fquantity" min="1" value="1" max="{{food.quantity}}" class="form-control text-center" style="width: 60px; margin: 0 auto;">
+              </div>
+              <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-warning">Order</button>
+              </div>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
     {% endfor %}
-    </div>
-    
-    </div>
-   
+  </div>
+</div>
 {% endblock %}

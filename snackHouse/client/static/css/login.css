@@ -5,8 +5,8 @@ body{
 }
 .login-section {
   background-color: black;
-  max-width: 400px;
-  max-height: 100%;
+  width: auto;
+  height: 100%;
   margin: 2rem auto;
   padding: 2rem;
   border-radius: 8px;
@@ -80,4 +80,6 @@ body{
   background-color: rgb(27, 246, 7);
 
 }
+
+
 

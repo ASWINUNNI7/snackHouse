@@ -2,75 +2,67 @@
 {% block title %}Food{% endblock %}
 {% block style %}
 <style>
-   body{
-  background-color: rgb(185, 176, 176);
-}
-#update{
-  margin-left: 180px;
-  margin-top: -38px;
-}
-#cancelall{
-  margin-left: 100px;
-  margin-top: -35px;
-}
+   body {
+      background-color: rgb(185, 176, 176);
+   }
 </style>
 
 {% for message in messages %}
 <script>
-alert("{{message}}")
+   alert("{{ message }}");
 </script>
 {% endfor %}
 {% endblock %}
 {% block content %}
-<div class="container py-4 my-4 ">
-  <h1 class="text-center"><strong>Food Cart</strong></h1>
-  {% if orders == 'none' %}
-  <p class="text-center " style="font-weight: bolder;color: red;font-size: 30px;">No items are added</p>
-                  <div class="d-flex justify-content-center">
-              <a href="{% url 'home' %}"><button type="button" class="btn btn-info btn-lg">Order Food</button></a>
+<div class="container py-4 my-4">
+   <h1 class="text-center"><strong>Food Cart</strong></h1>
+   {% if orders == 'none' %}
+   <p class="text-center text-danger fw-bold fs-4">No items are added</p>
+   <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+      <a href="{% url 'home' %}">
+         <button type="button" class="btn btn-info btn-lg">Order Food</button>
+      </a>
+   </div>
+   {% else %}
+   <div class="row">
+      {% for order in orders %}
+      <div class="col-md-3 p-3">
+         <div class="card">
+            <img src="{{ order.food_image.url }}" style="height: 150px; object-fit: cover;" class="card-img-top" alt="Food Image">
+            <div class="card-body text-center">
+               <h5 class="card-title text-uppercase fw-bold">{{ order.food_name }}</h5>
+               {% if order.category == 'Drinks' %}
+                  <p class="fw-bold">{{ order.quantity }} {% if order.quantity == 1 %}Glass{% else %}Glasses{% endif %}</p>
+               {% else %}
+                  <p class="fw-bold">{{ order.quantity }} {% if order.quantity == 1 %}Piece{% else %}Pieces{% endif %}</p>
+               {% endif %}
+               <p class="fw-bold">Rs {{ order.total_price }}</p>
+               <form action="cancelorder" method="post" class="d-inline">
+                  <input type="hidden" name="foodname" value="{{ order.food_name }}">
+                  <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+               </form>
+               <form action="updateorder" method="post" class="d-inline">
+                  <input type="hidden" name="foodname" value="{{ order.food_name }}">
+                  <button type="submit" class="btn btn-warning btn-sm">Update</button>
+               </form>
             </div>
-              {% else %}
-  <div class="row">
-    {% for order in orders %}
-    <div class="col-md-3 p-3">
-      <div class="card">
-        <img src="{{order.food_image.url}}" style="height: 150px;
-        object-fit: cover;" class="card-img-top" alt="Card 1">
-        <div class="card-body">
-          <h5 class="card-title text-center" style="font-family: 'Cormorant Garamond', serif;
-          font-size: 1.2rem;
-          text-transform: uppercase;"><b>{{order.food_name}}</b></h5>
-          {% if order.category == 'Drinks' %}
-            {% if order.quantity == 1 %}
-           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Glass</p>
-            {% else %}
-           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Glasses</p>
-            {% endif %}
-          {% else %}
-            {% if order.quantity == 1 %}
-           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Piece</p>
-            {% else %}
-           <p class="text-center" style="font-weight: bolder;">{{order.quantity}} Pieces</p>
-            {% endif %}
-          {% endif %}
-          <p class="text-center" style="font-weight: bolder;">Rs {{order.total_price}}</p>
-          <form action="cancelorder" method="post">
-            <input type="hidden" name="foodname" value="{{order.food_name}}">
-   <button type="submit" class="btn btn-danger btn mx-2">Cancel</button>
-  </form>
-  <div id="update">
-  <form action="updateorder" method="post">
-    <input type="hidden" name="foodname" value="{{order.food_name}}">
-<button type="submit" class="btn btn-warning btn mx-2">Update</button>
-</form></div>
-        </div>
+         </div>
       </div>
-    </div>
-    {% endfor %}
-    <a href="{% url 'home' %}"><button type="button" class="btn btn-secondary btn mx-2">Back</button></a>
-    <a href="{% url 'cancelAllorder' %}" id="cancelall"><button type="button" class="btn btn-danger btn mx-2">Cancel All</button></a>
-    <a href="{% url 'orderdetails'%}"><button type="button" class="btn btn-primary btn mx-2">Pay Bill</button></a></div>
-    {% endif %}
-    </div>
-    
+      {% endfor %}
+   </div>
+   <div class="d-flex justify-content-between mt-4">
+      <a href="{% url 'home' %}">
+         <button type="button" class="btn btn-secondary">Back</button>
+      </a>
+      <a href="{% url 'cancelAllorder' %}">
+         <button type="button" class="btn btn-danger">Cancel All</button>
+      </a>
+   </div>
+   <div class="d-flex justify-content-center mt-4">
+      <a href="{% url 'orderdetails' %}">
+         <button type="button" class="btn btn-primary btn-lg">Pay Bill</button>
+      </a>
+   </div>
+   {% endif %}
+</div>
 {% endblock %}
